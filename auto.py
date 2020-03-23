@@ -67,7 +67,6 @@ def start(token):
 if __name__ == '__main__':
     while True:
         localtime = time.localtime(time.time())
-        print('新一轮：' + str(time.time()))
         
         # 在23:00~1:00之间不进行打卡操作
         if localtime.tm_hour >= 23:
@@ -121,7 +120,7 @@ if __name__ == '__main__':
                     else:
                         print('意外的返回')
                     break
-                except FileNotFoundError as e:
+                except Exception as e:
                     print(e)
         time.sleep(5)
 
