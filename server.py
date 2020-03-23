@@ -1,7 +1,6 @@
 import requests
 import json
 import time
-import os
 from flask import Flask, request, redirect, url_for, send_from_directory, abort, jsonify
 from gevent.pywsgi import WSGIServer
 
@@ -11,7 +10,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     html = None
-    with open(os.getcwd() + '/html/index.html', 'r', encoding='utf-8') as f:
+    with open('html/index.html', 'r', encoding='utf-8') as f:
         html = f.read()
     return html
 
@@ -41,7 +40,7 @@ def get_token():
 @app.route('/example.png', methods=['POST', 'GET'])
 def get_img():
     img = None
-    with open(os.getcwd() + '/html/example.png', 'rb') as f:
+    with open('html/example.png', 'rb') as f:
         img = f.read()
     return img
 

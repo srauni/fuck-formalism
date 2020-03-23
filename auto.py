@@ -48,9 +48,10 @@ def start(token):
     # 判断是否已提交成功
     try:
         WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, "您今天已提交成功")))
-    except TimeoutException:
         driver.quit()
         return 0
+    except TimeoutException:
+        pass
     
     # 点击提交按钮
     WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/form/div/div[26]/a')))
