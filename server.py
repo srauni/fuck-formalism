@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     html = None
-    with open('html/index.html', 'r') as f:
+    with open('./html/index.html', 'r', encoding='utf-8') as f:
         html = f.read()
     return html
 
@@ -39,7 +39,7 @@ def get_token():
 @app.route('/example.png', methods=['POST', 'GET'])
 def get_img():
     img = None
-    with open('html/example.png', 'rb') as f:
+    with open('./html/example.png', 'rb') as f:
         img = f.read()
     return img
 
