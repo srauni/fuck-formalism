@@ -31,8 +31,9 @@ def start(token):
 
     # 判断token是否已失效（失效会跳转到登录页面）
     if driver.current_url != 'http://yqfk.dgut.edu.cn/main':
-        driver.quit()
-        return 1
+        #driver.quit()
+        #return 1
+        pass
 
     try:
         # 等待已有资料加载出来
@@ -47,7 +48,7 @@ def start(token):
 
     # 判断是否已提交成功
     try:
-        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, "您今天已提交成功")))
+        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div[2]')))
         driver.quit()
         return 0
     except TimeoutException:
@@ -59,7 +60,7 @@ def start(token):
     element.click()
 
     # 等待成功提交
-    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.PARTIAL_LINK_TEXT, '您今天已提交成功')))
+    WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]')))
     
     driver.quit()
 
