@@ -31,9 +31,8 @@ def start(token):
 
     # 判断token是否已失效（失效会跳转到登录页面）
     if driver.current_url != 'http://yqfk.dgut.edu.cn/main':
-        #driver.quit()
-        #return 1
-        pass
+        driver.quit()
+        return 1
 
     try:
         # 等待已有资料加载出来
