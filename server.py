@@ -15,19 +15,18 @@ def home():
         html = f.read()
     return html
 
-@app.route('/fuck-formalism', methods=['POST', 'GET'])
+@app.route('/fuck-formalism', methods=['POST'])
 def get_token():
     try:
         token = request.form['token']
         token = token.strip('"')
         token = token.strip("'")
-        if token == '':
+        if token == '' or token == None:
             return '请填写token再提交'
         token_list = None
         try:
             with open('token.json', 'r') as f:
                 token_list = json.loads(f.read())
-                token_list.append(token)
         except FileNotFoundError:
             token_list = []
         if token in token_list:
