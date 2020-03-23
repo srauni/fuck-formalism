@@ -29,8 +29,14 @@ def start(token):
     driver.execute_script("window.localStorage.setItem('token'," + token + ");")
     navigate(driver, 'http://yqfk.dgut.edu.cn/main')
 
-    # 判断token是否已失效（失效会跳转到登录页面）
-    if driver.current_url != 'http://yqfk.dgut.edu.cn/main':
+    # 判断token是否已失效（失效会跳转到登录页面且不跳回，但有时又不会跳转到登录页面）
+    try:
+        WebDriverWait(driver, 10).until(EC.url_matches('https://cas.dgut.edu.cn'))
+    except TimeoutException:
+        pass
+    try:
+        WebDriverWait(driver, 10).until(EC.url_matches('http://yqfk.dgut.edu.cn/'))
+    except TimeoutException:
         driver.quit()
         return 1
 
@@ -54,8 +60,8 @@ def start(token):
         pass
     
     # 点击提交按钮
-    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/form/div/div[26]/a')))
-    element = driver.find_element_by_xpath('/html/body/div/div/div/form/div/div[26]/a')
+    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/form/div/div[27]/a')))
+    element = driver.find_element_by_xpath('/html/body/div/div/div/form/div/div[27]/a')
     element.click()
 
     # 等待成功提交
