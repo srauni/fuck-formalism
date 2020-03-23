@@ -39,7 +39,7 @@ def start(token):
     except TimeoutException:
         driver.quit()
         return 1
-
+    print('测试点A')
     try:
         # 等待已有资料加载出来
         element = driver.find_element_by_xpath('/html/body/div/div/div/form/div/div[1]/div[2]/div/div[1]/div')
@@ -50,15 +50,18 @@ def start(token):
         # 页面跳转后也会导致元素失效，故在此设置异常
         driver.quit()
         return 1
-
+    print('测试点B')
     # 判断是否已提交成功
     try:
-        WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/div[2]')))
+        WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]')))
+        # 重新获取token（token可能会刷新）
+        token = driver.execute_script("return localStorage.getItem('token');")
+        print(token)
         driver.quit()
-        return 0
+        return token
     except TimeoutException:
         pass
-    
+    print('测试点C')
     # 点击提交按钮
     WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/form/div/div[27]/a')))
     element = driver.find_element_by_xpath('/html/body/div/div/div/form/div/div[27]/a')
@@ -66,10 +69,13 @@ def start(token):
 
     # 等待成功提交
     WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]')))
+
+    # 重新获取token（token可能会刷新）
+    token = driver.execute_script("return localStorage.getItem('token');")
     
     driver.quit()
 
-    return 0
+    return token
 
 if __name__ == '__main__':
     while True:
@@ -114,18 +120,24 @@ if __name__ == '__main__':
             if token in success_token:
                 continue
             while True:
+                print('开始执行' + token)
                 try:
                     res = start(token)
-                    if res == 0:
-                        with open(str(localtime.tm_year) + '-' + str(localtime.tm_mon) + '-' + str(localtime.tm_mday) + '.json', 'w') as f:
-                            success_token.append(token)
-                            f.write(json.dumps(success_token))
-                    elif res == 1:
-                        with open('useless_token.json', 'w') as f:
-                            useless_token.append(token)
-                            f.write(json.dumps(useless_token))
+                    if res == 1:
+                        useless_token.append(token)
                     else:
-                        print('意外的返回')
+                        if res != token:
+                            print('token已刷新为' + res)
+                            success_token.append(res)
+                            all_token.remove(token)
+                            all_token.append(res)
+                        success_token.append(token)
+                    with open('useless_token.json', 'w') as f:
+                        f.write(json.dumps(useless_token))
+                    with open(str(localtime.tm_year) + '-' + str(localtime.tm_mon) + '-' + str(localtime.tm_mday) + '.json', 'w') as f:
+                        f.write(json.dumps(success_token))
+                    with open('token.json', 'w') as f:
+                        f.write(json.dumps(all_token))
                     break
                 except Exception as e:
                     print(e)
