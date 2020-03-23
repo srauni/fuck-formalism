@@ -15,12 +15,14 @@ def home():
         html = f.read()
     return html
 
-@app.route('/fuck-formalism', methods=['POST'])
+@app.route('/fuck-formalism', methods=['POST', 'GET'])
 def get_token():
     try:
         token = request.form['token']
         token = token.strip('"')
         token = token.strip("'")
+        if token == '':
+            return '请填写token再提交'
         token_list = None
         try:
             with open('token.json', 'r') as f:
