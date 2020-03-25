@@ -1,9 +1,5 @@
 ### 代码文件的作用
 
-服务端有两个可执行文件
-
-`server.py` 用于服务器的网页处理，接受token传入并存储
-
 `auto.py` 用selenium配合firefox浏览器实现模拟操作功能，24小时不断打卡
 
 
@@ -34,14 +30,12 @@
 
 ### 服务运行方法
 
-运行`server.py` `auto.py`两个文件即可
+打开auto.py，在代码的`if __name__ == '__main__'`下面填写自己的帐号密码
+
+运行`auto.py`两个文件即可
 
 
 
-### 额外说明
+### 原理说明
 
-`token.json` 存储托管在服务器的所有token
-
-`uesless_token.json`  存储经排查无效的token
-
-`<year>-<month>-<day>.json` 存储当日已打卡的token
+Selenium库可以调用Firefox浏览器自动化，此脚本实现全套的登录、打卡操作
