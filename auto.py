@@ -58,6 +58,10 @@ def start(driver, account, password):
     # 判断是否已提交成功
     try:
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]')))
+        element = driver.find_element_by_xpath('/html/body/div/div/div/div[2]')
+        print(element.text)
+        if (element.text.find("成功") == -1):
+            raise TimeoutException
         print('今日已提交成功，无需再次提交')
         return 0
     except TimeoutException:
@@ -72,8 +76,15 @@ def start(driver, account, password):
 
     # 等待成功提交
     WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]')))
-    print('提交成功')
-    return 0
+    element = driver.find_element_by_xpath('/html/body/div/div/div/div[2]')
+    for i in range(30):
+        if element.text.find('成功') != -1:
+            print('提交成功')
+            return 0
+        time.sleep(1)
+
+    print('等待提交超时')
+    return 1
 
 if __name__ == '__main__':
     #---------------在此填写您的帐号和密码----------------
@@ -89,10 +100,10 @@ if __name__ == '__main__':
         localtime = time.localtime(time.time())
         
         # 在23:00~1:00之间不进行打卡操作，避开高峰期
-        if localtime.tm_hour >= 23:
+        if localtime.tm_hour >= 24:
             time.sleep(5)
             continue
-        if localtime.tm_hour < 1:
+        if localtime.tm_hour < 0:
             time.sleep(5)
             continue
 
