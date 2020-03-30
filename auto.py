@@ -100,10 +100,10 @@ if __name__ == '__main__':
         localtime = time.localtime(time.time())
         
         # 在23:00~1:00之间不进行打卡操作，避开高峰期
-        if localtime.tm_hour >= 24:
+        if localtime.tm_hour >= 23:
             time.sleep(5)
             continue
-        if localtime.tm_hour < 0:
+        if localtime.tm_hour < 1:
             time.sleep(5)
             continue
 
