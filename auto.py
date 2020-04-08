@@ -50,11 +50,16 @@ def start(driver, account, password):
     print('成功跳转到填表页面')
 
     # 等待已有资料加载完毕
-    WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/form/div/div[1]/div[2]/div/div[1]/div')))
-    element = driver.find_element_by_xpath('/html/body/div/div/div/form/div/div[1]/div[2]/div/div[1]/div')
-    while element.text == '':
-        time.sleep(0.1)
-    print('已有资料加载完毕')
+    # WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div/div/div/form/div/div[1]/div[2]/div/div[1]/div')))
+    # element = driver.find_element_by_xpath('/html/body/div/div/div/form/div/div[1]/div[2]/div/div[1]/div')
+    # while element.text == '':
+    #     time.sleep(0.1)
+    # print('已有资料加载完毕')
+
+    # 使用強制長等待來讓資料加載完畢
+    # 資料加載並非同步，列表資料會更晚加載，不好判斷，但有無成功是可以判斷的
+    time.sleep(30)
+
     # 判断是否已提交成功
     try:
         WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.XPATH, '/html/body/div/div/div/div[2]')))
